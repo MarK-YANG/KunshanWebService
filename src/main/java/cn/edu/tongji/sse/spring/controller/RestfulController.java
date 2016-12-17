@@ -2,18 +2,14 @@ package cn.edu.tongji.sse.spring.controller;
 
 import cn.edu.tongji.sse.spring.dao.RecordDAO;
 import cn.edu.tongji.sse.spring.dao.WifiDAO;
+import cn.edu.tongji.sse.spring.service.RecordService;
 import cn.edu.tongji.sse.spring.service.WifiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by mark on 12/8/16.
@@ -27,6 +23,12 @@ public class RestfulController {
     private RecordDAO recordDAO;
 
     private WifiService wifiService;
+    private RecordService recordService;
+
+    @GetMapping(value = "/hhhh")
+    public ResponseEntity sayHello(){
+        return new ResponseEntity("hello", HttpStatus.OK);
+    }
 
     @GetMapping(value="/w")
     public ResponseEntity getWifi(){
@@ -51,6 +53,14 @@ public class RestfulController {
         List<Map<String, Object>> conditions = (List<Map<String, Object>>) json.get("conditions");
         wifiService = new WifiService();
         Map<String, int[]> returnMap = wifiService.wifiResult(conditions);
+        return new ResponseEntity(returnMap, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/memory")
+    public ResponseEntity rsInterface(@RequestBody Map<String, Object> json){
+        List<Map<String, Object>> conditions = (List<Map<String, Object>>) json.get("conditions");
+        recordService = new RecordService();
+        Map<String, int[]> returnMap = recordService.queryWifiRecords(conditions);
         return new ResponseEntity(returnMap, HttpStatus.OK);
     }
 }

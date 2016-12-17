@@ -42,5 +42,16 @@ public class Main {
                 System.out.println(a);
             }
         }
+
+
+        System.out.println("=======");
+        int apple = 5;
+
+        for (int i = 0; i < 10; ++i){
+            apple = apple + apple;
+            System.out.println(apple);
+        }
+        
+        System.out.println(apple);
     }
 }

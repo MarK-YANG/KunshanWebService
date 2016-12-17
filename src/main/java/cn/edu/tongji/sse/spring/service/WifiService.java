@@ -27,12 +27,16 @@ public class WifiService {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
         System.out.println(df.format(new Date()));// new Date()为获取当前系统时间
 
+        int iIndex = 0;
         for (Map<String, Object> condition: conditions){
             long startTime = new Long((int)condition.get("start_time"));
             long endTime = new Long((int)condition.get("end_time"));
             List<String> devices = (List<String>) condition.get("devices");
+            System.out.println(iIndex + "\tSTART\t" + df.format(new Date()));
             List<String> macs = recordDAO.findMacsByDeviceAndTime(startTime, endTime, devices);
+            System.out.println(iIndex + "\tEND   \t" + df.format(new Date()));
             allMacs.add(macs);
+            iIndex ++;
         }
 
         for (int i = 0; i < allMacs.size(); ++i){
