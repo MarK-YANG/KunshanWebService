@@ -1,8 +1,14 @@
 package cn.edu.tongji.sse.spring.controller;
 
+import cn.edu.tongji.sse.spring.mongo.MongoUtil;
+import com.mongodb.client.MongoCollection;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
+import org.bson.Document;
 
+import javax.swing.*;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 /**
@@ -27,31 +33,18 @@ public class Main {
         HashMap<String, int[]> hello = new HashMap<>();
         int[] array = {1,2,3,4,5,6,8};
 
-        for (int a: array){
-            if(hello.containsKey("abc")){
-                continue;
-            }else{
-                hello.put(String.valueOf(a), new int[5]);
-                hello.get(String.valueOf(a))[1] = 111;
-            }
-        }
+
+        MongoUtil util = new MongoUtil();
+        Map<String, List> map = new HashMap<>();
+        int[] arrNum = {1, 2, 3, 4};
+        Arrays.asList(arrNum);
+        map.put("B", IntStream.of(arrNum).boxed().collect(Collectors.toList()));
+//        map.put("B", arrNum);
+//        map.put("C", arrNum);
+//        map.put("D", arrNum);
+        MongoCollection collection = util.getCollection("Wifi");
+        collection.insertOne(new Document("Hello", map));
 
 
-        for (Map.Entry<String, int[]> entry : hello.entrySet()){
-            for (int a : entry.getValue()){
-                System.out.println(a);
-            }
-        }
-
-
-        System.out.println("=======");
-        int apple = 5;
-
-        for (int i = 0; i < 10; ++i){
-            apple = apple + apple;
-            System.out.println(apple);
-        }
-        
-        System.out.println(apple);
     }
 }

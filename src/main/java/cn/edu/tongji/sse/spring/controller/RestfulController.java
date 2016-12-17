@@ -2,6 +2,7 @@ package cn.edu.tongji.sse.spring.controller;
 
 import cn.edu.tongji.sse.spring.dao.RecordDAO;
 import cn.edu.tongji.sse.spring.dao.WifiDAO;
+import cn.edu.tongji.sse.spring.mongo.MongoUtil;
 import cn.edu.tongji.sse.spring.service.RecordService;
 import cn.edu.tongji.sse.spring.service.ThreadService;
 import cn.edu.tongji.sse.spring.service.WifiService;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -68,9 +70,15 @@ public class RestfulController {
 
     @PostMapping(value = "/thread")
     public ResponseEntity threadInterface(@RequestBody Map<String, Object> json){
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println("Start: " + df.format(new Date()));
         List<Map<String, Object>> conditions = (List<Map<String, Object>>) json.get("conditions");
         threadService = new ThreadService();
         Map<String, int[]> returnMap = threadService.queryResultByCallable(conditions);
-        return new ResponseEntity(returnMap, HttpStatus.OK);
+        MongoUtil util = new MongoUtil();
+        System.out.println("Start writing into mongodb: " + df.format(new Date()));
+        util.insertOneRecord("Wifi", util.Map2Document(returnMap));
+        System.out.println("FINISH: " + df.format(new Date()));
+        return new ResponseEntity("HelloWorld", HttpStatus.OK);
     }
 }
