@@ -3,6 +3,7 @@ package cn.edu.tongji.sse.spring.controller;
 import cn.edu.tongji.sse.spring.dao.RecordDAO;
 import cn.edu.tongji.sse.spring.dao.WifiDAO;
 import cn.edu.tongji.sse.spring.service.RecordService;
+import cn.edu.tongji.sse.spring.service.ThreadService;
 import cn.edu.tongji.sse.spring.service.WifiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ public class RestfulController {
 
     private WifiService wifiService;
     private RecordService recordService;
+    private ThreadService threadService;
 
     @GetMapping(value = "/hhhh")
     public ResponseEntity sayHello(){
@@ -61,6 +63,14 @@ public class RestfulController {
         List<Map<String, Object>> conditions = (List<Map<String, Object>>) json.get("conditions");
         recordService = new RecordService();
         Map<String, int[]> returnMap = recordService.queryWifiRecords(conditions);
+        return new ResponseEntity(returnMap, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/thread")
+    public ResponseEntity threadInterface(@RequestBody Map<String, Object> json){
+        List<Map<String, Object>> conditions = (List<Map<String, Object>>) json.get("conditions");
+        threadService = new ThreadService();
+        Map<String, int[]> returnMap = threadService.queryResultByCallable(conditions);
         return new ResponseEntity(returnMap, HttpStatus.OK);
     }
 }
